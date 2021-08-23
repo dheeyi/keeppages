@@ -3,12 +3,14 @@ import axios from 'axios'
 import SearchTextField from '../../components/SearchTextField'
 import ListCard from '../../components/ListCard'
 import Modal from '../../components/Modal'
+import AddItemForm from '../../components/addItemForm';
 
 const KeepPage = () => {
 
   const [data, setData] = useState([])
   const [search, setSearch] = useState('')
   const [modalIsOpen, setIsOpen] = useState(false)
+  const [formIsOpen, setIsOpenForm] = useState(false)
   const [itemSelected, setItemSelected] = useState({})
 
   useEffect(() => {
@@ -83,6 +85,29 @@ const KeepPage = () => {
       })
   }
 
+  const addItem = (title, link, description, tags) => {
+
+    axios.post('/api/keep-pages/add', {
+      title,
+      link,
+      description,
+      tags
+    })
+      .then((response) => {
+
+        setIsOpenForm(false)
+        setData(response?.data || [])
+
+      })
+      .catch((errors) => {
+
+        setIsOpenForm(false)
+        console.log(errors)
+
+      })
+
+  }
+
   const updateItemSelected = (id, name) => {
     setItemSelected({id, name})
     setIsOpen(true)
@@ -101,6 +126,12 @@ const KeepPage = () => {
           deleteItem={deleteItem}
         />
 
+        <AddItemForm
+          modalIsOpen={formIsOpen}
+          closeModal={() => {setIsOpenForm(false)}}
+          addItem={addItem}
+        />
+
         <div className="row row-cols-1 w-100 ps-3">
           <SearchTextField  searchFn={(value) => {
             setSearch(value)
@@ -115,7 +146,11 @@ const KeepPage = () => {
           }
         </div>
 
-        <button type="button" className="btn btn-primary rounded-circle fs-2 fw-bold fixed-button">+</button>
+        <button className="btn btn-primary rounded-circle fs-2 fw-bold fixed-button"
+          type="button"
+          onClick={() => {setIsOpenForm(true)}}
+          >+
+        </button>
 
       </div>
     </div>

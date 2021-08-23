@@ -118,4 +118,31 @@ router.post(
   }
 );
 
+router.post(
+  '/add',
+  (req, res) => {
+
+    const { title = 'default title', link = 'www.google.com', description = '', tags = '' } = req.body
+
+    const ids = data.pages.map((item) => {
+      return item.id
+    })
+
+    data.pages.push(
+      {
+        "id": Math.max(...ids) + 1,
+        "title": title,
+        "link": link,
+        "description": description,
+        "tags": [tags]
+      }
+    )
+
+    res
+      .status(200)
+      .json(data.pages)
+
+  }
+)
+
 module.exports = router;
