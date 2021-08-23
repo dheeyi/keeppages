@@ -23,9 +23,9 @@ git clone https://github.com/dheeyi/keeppages.git
 SSR and CSR:
 
 ```sh
-cd keepPages
+cd keepages
 
-git checkout main
+git checkout master
 
 npm install
 ```
